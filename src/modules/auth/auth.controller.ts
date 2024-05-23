@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { UpdateAuthDto } from './dto/req/update-auth.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
