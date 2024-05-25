@@ -19,4 +19,10 @@ export class UserEntity {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @Column()
+  age: number;
+
+  @Column()
+  phone: number;
 }
