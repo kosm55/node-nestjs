@@ -34,7 +34,7 @@ export class UserController {
   public async create(
     @Body() dto: CreateUserReqDto,
   ): Promise<PrivateUserResDto> {
-    console.log(dto);
+    //console.log(dto);
     return await this.userService.create(dto);
   }
 

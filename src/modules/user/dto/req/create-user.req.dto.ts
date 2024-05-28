@@ -30,7 +30,7 @@ export class CreateUserReqDto {
   @Transform(TransformHelper.trim)
   public readonly name: string;
 
-  @Matches(/^(?=.*[a-z])(?=.*\d)(?=.*[a-z0-9]).{8,}$/, {
+  @Matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, {
     message: 'invalid email',
   })
   @Transform(TransformHelper.trim)
@@ -40,7 +40,7 @@ export class CreateUserReqDto {
 
   @IsString()
   @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/, {
-    message: 'invalid email',
+    message: 'invalid password',
   })
   @Transform(TransformHelper.trim)
   public readonly password: string;
