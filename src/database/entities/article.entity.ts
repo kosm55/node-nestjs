@@ -7,6 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 
+import { CommentEntity } from './comment.entity';
 import { TableNameEnum } from './enums/table-name.enum';
 import { LikeEntity } from './like.entity';
 import { BaseModel } from './models/base.model';
@@ -35,4 +36,7 @@ export class ArticleEntity extends BaseModel {
 
   @ManyToMany(() => TagEntity, (entity) => entity.articles)
   tags?: TagEntity[];
+
+  @OneToMany(() => CommentEntity, (entity) => entity.article)
+  comments?: LikeEntity[];
 }
