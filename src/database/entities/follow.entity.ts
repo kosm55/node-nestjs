@@ -10,11 +10,11 @@ export class FollowEntity extends BaseModel {
   follower_id: string;
   @ManyToOne(() => UserEntity, (entity) => entity.followers)
   @JoinColumn({ name: 'follower_id' })
-  follower: UserEntity; //на одного може бути підписано багато
+  follower?: UserEntity; //на одного може бути підписано багато
 
   @Column()
   following_id: string;
   @ManyToOne(() => UserEntity, (entity) => entity.following)
   @JoinColumn({ name: 'following_id' })
-  following: UserEntity; //один може бути підписаний на багато
+  following?: UserEntity; //один може бути підписаний на багато
 }

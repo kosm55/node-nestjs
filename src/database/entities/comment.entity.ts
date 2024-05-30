@@ -14,11 +14,11 @@ export class CommentEntity extends BaseModel {
   user_id: string;
   @ManyToOne(() => UserEntity, (entity) => entity.comments)
   @JoinColumn({ name: 'user_id' })
-  user: UserEntity;
+  user?: UserEntity;
 
   @Column()
   article_id: string;
   @ManyToOne(() => ArticleEntity, (entity) => entity.comments)
   @JoinColumn({ name: 'article_id' })
-  article: ArticleEntity;
+  article?: ArticleEntity;
 }
