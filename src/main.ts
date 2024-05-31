@@ -7,10 +7,11 @@ import { AppModule } from './app.module';
 import { AppConfig } from './configs/config.type';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule); //створ і ініціалізац нашої апки
 
-  const configService = app.get(ConfigService);
-  const appConfig = configService.get<AppConfig>('app');
+  const configService = app.get(ConfigService); //отримуємо досту до ConfigService,
+  // який є частиною @nestjs/config пакету
+  const appConfig = configService.get<AppConfig>('app'); //отримуємо конфігураційні дані з configService для 'app'
 
   const config = new DocumentBuilder()
     .setTitle('Cats example')
@@ -32,10 +33,15 @@ async function bootstrap() {
     },
   });
   app.useGlobalPipes(
+    // глобальнйи канал валідації усіїє апки
     new ValidationPipe({
-      transform: true,
-      whitelist: true,
-      forbidNonWhitelisted: true,
+      //кожен вхідний запит валідується і чекається тут спочатку
+      transform: true, //вхідні дані будуть автоматично перетворені на типи, визначені у DTO
+      whitelist: true, //все що передаємо лишнє проігнорується, напр.у юзера нема поля карс,
+      // переданий карс буде проігнорований
+      //усі зайві поля, які не визначені у  DTO, будуть автоматично видалені
+      forbidNonWhitelisted: true, // має бути помилка, що такого переаного поля не існує
+      //якщо вхідні дані містять поля, які не визначені у  DTO, буде викликана помилка валідації
     }),
   );
   await app.listen(appConfig.port, appConfig.host, () => {

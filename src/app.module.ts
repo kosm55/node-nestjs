@@ -13,8 +13,9 @@ import { UserModule } from './modules/user/user.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [configuration],
-      isGlobal: true,
+      //forRoot()- конфігурація стає доступною для всіх модулів
+      load: [configuration], //завантажує конфігурацію з іншого файлу який вказано і обєднує з основною
+      isGlobal: true, //встановлення глобального доступу до конфігурації
     }),
     RepositoryModule,
     LoggerModule,
