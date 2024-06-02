@@ -8,25 +8,19 @@ import { RefreshTokenRepository } from './services/refresh-token.repository';
 import { TagRepository } from './services/tag.repository';
 import { UserRepository } from './services/user.repository';
 
+const repositories = [
+  UserRepository,
+  ArticleRepository,
+  TagRepository,
+  LikeRepository,
+  FollowRepository,
+  CommentRepository,
+  RefreshTokenRepository,
+];
+
 @Global()
 @Module({
-  providers: [
-    UserRepository,
-    ArticleRepository,
-    TagRepository,
-    LikeRepository,
-    FollowRepository,
-    CommentRepository,
-    RefreshTokenRepository,
-  ],
-  exports: [
-    UserRepository,
-    ArticleRepository,
-    TagRepository,
-    LikeRepository,
-    FollowRepository,
-    CommentRepository,
-    RefreshTokenRepository,
-  ],
+  providers: [...repositories],
+  exports: [...repositories],
 })
 export class RepositoryModule {}

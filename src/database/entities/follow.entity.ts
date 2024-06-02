@@ -14,7 +14,7 @@ export class FollowEntity extends BaseModel {
 
   @Column()
   following_id: string;
-  @ManyToOne(() => UserEntity, (entity) => entity.following)
+  @ManyToOne(() => UserEntity, (entity) => entity.followings)
   @JoinColumn({ name: 'following_id' })
   following?: UserEntity; //один може бути підписаний на багато
 }

@@ -41,5 +41,5 @@ export class UserEntity extends BaseModel {
   followers?: FollowEntity[];
 
   @OneToMany(() => FollowEntity, (entity) => entity.following)
-  following?: FollowEntity[];
+  followings?: FollowEntity[];
 }
