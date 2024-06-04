@@ -16,7 +16,7 @@ export class UserEntity extends BaseModel {
   @Column('text', { unique: true })
   email: string;
 
-  @Column('text')
+  @Column('text', { select: false })
   password: string;
 
   @Column('text', { nullable: true })
