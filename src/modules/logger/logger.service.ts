@@ -9,9 +9,11 @@ import { Config, SentryConfig } from '../../configs/config.type';
 export class LoggerService {
   private isLocal: boolean;
   private readonly logger = new Logger();
+
   constructor(private readonly configService: ConfigService<Config>) {
     const sentryConfig = configService.get<SentryConfig>('sentry');
     this.isLocal = sentryConfig.env === 'local';
+
     Sentry.init({
       dsn: sentryConfig.dsn,
       debug: sentryConfig.debug,

@@ -5,7 +5,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
-  Patch,
+  Put,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -27,28 +27,34 @@ import { UserService } from './services/user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @SkipAuth()
+  @ApiBearerAuth()
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiNotFoundResponse({ description: 'Not found' })
-  @Get(':id')
-  public async findOne(
-    @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<UserResDto> {
-    return await this.userService.findOne(id);
+  @Get('me')
+  public async getMe(@CurrentUser() userData: IUserData): Promise<UserResDto> {
+    return await this.userService.getMe(userData);
   }
 
   @ApiBearerAuth()
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiNotFoundResponse({ description: 'Not Found' })
-  @Patch(':id')
-  public async update(
+  @Put('me')
+  public async updateMe(
     @CurrentUser() userData: IUserData,
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateUserDto: UpdateUserReqDto,
-  ): Promise<any> {
-    return await this.userService.update(userData, updateUserDto);
+    @Body() dto: UpdateUserReqDto,
+  ): Promise<UserResDto> {
+    return await this.userService.updateMe(userData, dto);
+  }
+
+  @SkipAuth()
+  @ApiNotFoundResponse({ description: 'Not found' })
+  @Get(':userId')
+  public async getById(
+    @Param('userId', ParseUUIDPipe) userId: string,
+  ): Promise<UserResDto> {
+    return await this.userService.getById(userId);
   }
 
   @ApiBearerAuth()
