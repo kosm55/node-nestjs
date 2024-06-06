@@ -28,7 +28,7 @@ export class JwtAccessGuard implements CanActivate {
       context.getHandler(), // ці два поля даємо canActivate, для того щоб він розумів звідки брати наш ключ SKIP_AUTH
       context.getClass(),
     ]);
-    if (SKIP_AUTH) return true; // якщо SKIP_AUTH тру то просто вийде зі значенням тру і не буде заходити далі нижче,
+    if (skipAuth) return true; // якщо SKIP_AUTH тру то просто вийде зі значенням тру і не буде заходити далі нижче,
     // жодну перевірку не робимо - виходимо
 
     const request = context.switchToHttp().getRequest(); //дістаємо наш реквест,switchToHttp-просто перемикач контексту
