@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Post,
   Put,
 } from '@nestjs/common';
 import {
@@ -48,6 +49,17 @@ export class UserController {
     return await this.userService.updateMe(userData, dto);
   }
 
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiNotFoundResponse({ description: 'Not found' })
+  @Delete('me')
+  public async remove(
+    @CurrentUser() userData: IUserData,
+    @Param('id', ParseUUIDPipe) userId: string,
+  ): Promise<void> {
+    return await this.userService.remove(userId);
+  }
+
   @SkipAuth()
   @ApiNotFoundResponse({ description: 'Not found' })
   @Get(':userId')
@@ -58,14 +70,20 @@ export class UserController {
   }
 
   @ApiBearerAuth()
-  @ApiForbiddenResponse({ description: 'Forbidden' })
-  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  @ApiNotFoundResponse({ description: 'Not found' })
-  @Delete(':id')
-  public async remove(
+  @Post(':userId/follow')
+  public async follow(
     @CurrentUser() userData: IUserData,
-    @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<any> {
-    return await this.userService.remove(id);
+    @Param('userId', ParseUUIDPipe) userId: string,
+  ): Promise<void> {
+    await this.userService.follow(userData, userId);
+  }
+
+  @ApiBearerAuth()
+  @Delete(':userId/follow')
+  public async unfollow(
+    @CurrentUser() userData: IUserData,
+    @Param('userId', ParseUUIDPipe) userId: string,
+  ): Promise<void> {
+    await this.userService.unfollow(userData, userId);
   }
 }
