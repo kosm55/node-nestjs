@@ -41,7 +41,7 @@ export class UserController {
   @ApiBearerAuth()
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  @ApiNotFoundResponse({ description: 'Not found' })
+  @ApiNotFoundResponse({ description: 'Not Found' })
   @Patch(':id')
   public async update(
     @CurrentUser() userData: IUserData,
