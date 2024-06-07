@@ -1,4 +1,15 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiForbiddenResponse,
@@ -10,15 +21,27 @@ import {
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { IUserData } from '../auth/interfaces/user-data.interface';
 import { CreateArticleReqDto } from './dto/req/create-article.req.dto';
+import { UpdateArticleReqDto } from './dto/req/update-article.req.dto';
 import { ArticleResDto } from './dto/res/article.res.dto';
 import { ArticleService } from './services/article.service';
 
+@ApiBearerAuth()
 @ApiTags('Articles')
 @Controller('articles')
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
-  @ApiBearerAuth()
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiNotFoundResponse({ description: 'Not found' })
+  @Get()
+  public async getList(
+    @CurrentUser() userData: IUserData,
+    @Query() query: any,
+  ): Promise<any> {
+    return await this.articleService.getList(userData, query);
+  }
+
   @ApiForbiddenResponse({ description: 'Forbidden' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiNotFoundResponse({ description: 'Not found' })
@@ -28,5 +51,40 @@ export class ArticleController {
     @Body() dto: CreateArticleReqDto,
   ): Promise<ArticleResDto> {
     return await this.articleService.create(userData, dto);
+  }
+
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiNotFoundResponse({ description: 'Not found' })
+  @Get(':articleId')
+  public async getById(
+    @CurrentUser() userData: IUserData,
+    @Param('articleId') articleId: string,
+  ): Promise<ArticleResDto> {
+    return await this.articleService.getById(userData, articleId);
+  }
+
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiNotFoundResponse({ description: 'Not found' })
+  @Put(':articleId')
+  public async updateById(
+    @CurrentUser() userData: IUserData,
+    @Param('articleId') articleId: string,
+    @Body() dto: UpdateArticleReqDto,
+  ): Promise<ArticleResDto> {
+    return await this.articleService.updateById(userData, articleId, dto);
+  }
+
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiNotFoundResponse({ description: 'Not found' })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(':articleId')
+  public async deleteById(
+    @CurrentUser() userData: IUserData,
+    @Param('articleId') articleId: string,
+  ): Promise<void> {
+    await this.articleService.deleteById(userData, articleId);
   }
 }
