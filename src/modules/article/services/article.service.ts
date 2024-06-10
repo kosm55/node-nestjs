@@ -12,9 +12,11 @@ import { LoggerService } from '../../logger/logger.service';
 import { ArticleRepository } from '../../repository/services/article.repository';
 import { TagRepository } from '../../repository/services/tag.repository';
 import { UserRepository } from '../../repository/services/user.repository';
+import { ArticleListReqDto } from '../dto/req/article-list.req.dto';
 import { CreateArticleReqDto } from '../dto/req/create-article.req.dto';
 import { UpdateArticleReqDto } from '../dto/req/update-article.req.dto';
 import { ArticleResDto } from '../dto/res/article.res.dto';
+import { ArticleListResDto } from '../dto/res/article-list.res.dto';
 import { ArticleMapper } from './article.mapper';
 
 @Injectable()
@@ -26,12 +28,15 @@ export class ArticleService {
     private readonly tagRepository: TagRepository,
   ) {}
 
-  public async getList(userData: IUserData, query: any): Promise<any> {
+  public async getList(
+    userData: IUserData,
+    query: ArticleListReqDto,
+  ): Promise<ArticleListResDto> {
     const [entities, total] = await this.articleRepository.getList(
       userData,
       query,
     );
-    return { entities, total };
+    return ArticleMapper.toListResponseDTO(entities, total, query);
   }
 
   public async create(

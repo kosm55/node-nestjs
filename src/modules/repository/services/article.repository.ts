@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 
 import { ArticleEntity } from '../../../database/entities/article.entity';
+import { ArticleListReqDto } from '../../article/dto/req/article-list.req.dto';
 import { IUserData } from '../../auth/interfaces/user-data.interface';
 
 @Injectable()
@@ -11,7 +12,7 @@ export class ArticleRepository extends Repository<ArticleEntity> {
   }
   public async getList(
     userData: IUserData,
-    query: any,
+    query: ArticleListReqDto,
   ): Promise<[ArticleEntity[], number]> {
     const qb = this.createQueryBuilder('article');
 
@@ -24,9 +25,21 @@ export class ArticleRepository extends Repository<ArticleEntity> {
     );
     qb.setParameter('myId', userData.userId);
 
+    if (query.tag) {
+      qb.andWhere('tag.name=:tag');
+      qb.setParameter('tag', query.tag);
+    }
+
+    if (query.search) {
+      qb.andWhere(
+        'CONCAT(LOWER(article.title), LOWER(article.description) , LOWER(article.body)) LIKE :search',
+      ); //шукаємо у title description body все що ми поклали у сетпарам search
+      qb.setParameter('search', `%${query.search}%`);
+    }
+
     qb.orderBy('article.created', 'DESC');
-    qb.take(query.limit || 5);
-    qb.skip(query.offset || 0);
+    qb.take(query.limit);
+    qb.skip(query.offset);
 
     // qb.andWhere() додати умову статус делете-null, це коли софт деліт,  коли видалені пости не треба показувати
     return await qb.getManyAndCount();

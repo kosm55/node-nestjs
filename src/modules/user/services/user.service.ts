@@ -14,7 +14,7 @@ import { UserMapper } from './user.mapper';
 
 @Injectable()
 export class UserService {
-  //private readonly logger = new Logger(ArticleService.name);
+  //private readonly logger = new Logger(TagService.name);
 
   constructor(
     private readonly logger: LoggerService,
