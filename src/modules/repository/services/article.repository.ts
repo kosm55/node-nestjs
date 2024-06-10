@@ -17,11 +17,12 @@ export class ArticleRepository extends Repository<ArticleEntity> {
 
     qb.leftJoinAndSelect('article.tags', 'tag');
     qb.leftJoinAndSelect('article.user', 'user');
-    // qb.leftJoinAndSelect(
-    //   'user.followings',
-    //   'follow',
-    //   'follow.follower_id= :myId',
-    // );
+    qb.leftJoinAndSelect(
+      'user.followings',
+      'follow',
+      'follow.follower_id= :myId',
+    );
+    qb.setParameter('myId', userData.userId);
 
     qb.orderBy('article.created', 'DESC');
     qb.take(query.limit || 5);
